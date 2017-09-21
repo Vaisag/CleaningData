@@ -1,0 +1,86 @@
+run_analysis <- function()
+{
+  #The objective of this function is to create a tidy dataset which will help in future analysis.
+  #The experiments have been carried out with a group of 30 volunteers within an age bracket of 19-48 years.
+  #Each person performed six activities (WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING) wearing a smartphone (Samsung Galaxy S II) on the waist.
+  #Using its embedded accelerometer and gyroscope, we captured 3-axial linear acceleration and 3-axial angular velocity at a constant rate of 50Hz.
+  #From the obtained data we create a tidy dataset called tidydata
+  
+  #read test and train datasets
+  train <- read.table('./train/X_train.txt', header = FALSE)
+  test <- read.table('./test/X_test.txt', header = FALSE)
+  
+  #read class labels
+  trainLabel <- read.table('./train/y_train.txt', header = FALSE)
+  testLabel <- read.table('./test/y_test.txt', header = FALSE)
+  activity <- read.table('./activity_labels.txt', header = FALSE)
+  
+  #read subject details
+  subjectTrain <-
+    read.table('./train/subject_train.txt', header = FALSE)
+  subjectTest <-
+    read.table('./test/subject_test.txt', header = FALSE)
+  mergedSubject <- rbind(subjectTrain, subjectTest)
+  
+  colnames(activity) <- c("activityNum", "activityName")
+  
+  
+  #1. Merges the training and the test sets to create one data set.
+  mergedData <- merge(train, test, all = TRUE)
+  
+  #3. Uses descriptive activity names to name the activities in the data set
+  ActivityFun <- function(x)
+  {
+    nameOfColumn <- activity$activityName[x]
+  }
+  
+  activityNameTrain <- sapply(trainLabel, ActivityFun)
+  activityNameTest <- sapply(testLabel, ActivityFun)
+  
+  mergedLabel <- rbind(activityNameTrain, activityNameTest)
+  
+  #read features dataset for getting the column names
+  columnNames <- read.table('features.txt', header = FALSE)
+  columnNames <- as.data.frame(columnNames)
+  colnames(columnNames) <- c("seq", "feature")
+  
+  #2. Extracts only the measurements on the mean and standard deviation for each measurement.
+  
+  library(dplyr)
+  mergedMean <-
+    select(mergedData, grep("mean", columnNames$feature))
+  mergedStd  <- select(mergedData, grep("std", columnNames$feature))
+  
+  mergedMeanColNums <- grep("mean", columnNames$feature)
+  mergedStdColNums <- grep("std", columnNames$feature)
+  nameFun <- function(x)
+  {
+    nameOfColumn <- columnNames$feature[x]
+  }
+  
+  mergedMeanColNames <- sapply(mergedMeanColNums, nameFun)
+  mergedStdColNames <- sapply(mergedStdColNums, nameFun)
+  
+  colnames(mergedMean) <- mergedMeanColNames
+  colnames(mergedStd) <- mergedStdColNames
+  
+  #assign columnNames for mergedData
+  #4. Appropriately labels the data set with descriptive variable names.
+  colnames(mergedData) <- columnNames$feature
+  allMergedData <- cbind(mergedSubject, mergedLabel, mergedData)
+  
+  colnames(allMergedData)[1] <- c('subject')
+  colnames(allMergedData)[2] <- c('activity')
+  
+  tidyDfBoth <-
+    aggregate(. ~ allMergedData$subject + allMergedData$activity,
+              allMergedData[, 3:563],
+              mean)
+  colnames(tidyDfBoth)[1] <- c('Subject')
+  colnames(tidyDfBoth)[2] <- c('Activity')
+  
+  print(tidyDfBoth)
+  write.table(tidyDfBoth, file = "C:/Users/Vaisag/Desktop/DataScience/Cleaning Data/Project/tidyDF.txt", row.name =
+                FALSE)
+  
+}
