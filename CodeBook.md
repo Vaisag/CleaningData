@@ -1,3 +1,4 @@
+# Variable Details
 train - table which has X_train file's data
 test - table which has X_test file's data
 trainLabel - table which has y_train file's data
