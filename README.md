@@ -23,3 +23,4 @@ The objective of the function run_analysis is to fulfill the following five thin
 * Download the data from https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
 * Set the downloaded path as working directory
 * Source the code and run the function by calling run_analysis()
+# Final Result - tidyDF.txt
