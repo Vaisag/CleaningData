@@ -12,13 +12,11 @@
 * activityNameTest - All activity numbers in testLabel are assigned with the activity names
 * mergedLabel - merged table which has both activityNameTrain and activityNameTest
 * columnNames - table which has features file's data;
-* mergedMean - mean columns data from the mergedData dataset
-* mergedStd - std columns data from the mergedData dataset
-* mergedMeanColNums - used as intermediate variable to get the column numbers with mean in it
-* mergedStdColNums - used as intermediate variable to get the column numbers with std in it
-* mergedMeanColNames - column names which has mean in it
-* mergedStdColNames - column names which has std in it
-* allMergedData - a merged Dataset which has all the data in the mergedSubject, mergedLabel and mergedData datasets
+* toMatch - intermediate variable which has the strings mean and std
+* mergedMeanStd - mean and std columns data from the mergedData dataset
+* mergedMeanStdColNums - used as intermediate variable to get the column numbers with mean or std in it
+* mergedMeanStdColNames - column names which has mean or std in it
+* allMergedData - a merged Dataset which has all the data in the mergedSubject, mergedLabel and mergedMeanStd datasets
 * tidyDfBoth - tidy dataset which has means for each variable for each subject and each activity
 
 
