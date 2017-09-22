@@ -47,36 +47,39 @@ run_analysis <- function()
   #2. Extracts only the measurements on the mean and standard deviation for each measurement.
   
   library(dplyr)
-  mergedMean <-
-    select(mergedData, grep("mean", columnNames$feature))
-  mergedStd  <- select(mergedData, grep("std", columnNames$feature))
+  toMatch <- c("mean", "std")
+  mergedMeanStd <-
+    select(mergedData, unique(grep(
+      paste(toMatch, collapse = "|"), columnNames$feature
+    )))
   
-  mergedMeanColNums <- grep("mean", columnNames$feature)
-  mergedStdColNums <- grep("std", columnNames$feature)
+  mergedMeanStdColNums <-
+    unique(grep(paste(toMatch, collapse = "|"), columnNames$feature))
   nameFun <- function(x)
   {
     nameOfColumn <- columnNames$feature[x]
   }
   
-  mergedMeanColNames <- sapply(mergedMeanColNums, nameFun)
-  mergedStdColNames <- sapply(mergedStdColNums, nameFun)
-  
-  colnames(mergedMean) <- mergedMeanColNames
-  colnames(mergedStd) <- mergedStdColNames
+  mergedMeanStdColNames <- sapply(mergedMeanStdColNums, nameFun)
+  colnames(mergedMeanStd) <- mergedMeanStdColNames
   
   #assign columnNames for mergedData
   #4. Appropriately labels the data set with descriptive variable names.
   colnames(mergedData) <- columnNames$feature
-  allMergedData <- cbind(mergedSubject, mergedLabel, mergedData)
+  allMergedData <- cbind(mergedSubject, mergedLabel, mergedMeanStd)
   
   colnames(allMergedData)[1] <- c('subject')
   colnames(allMergedData)[2] <- c('activity')
   
   tidyDfBoth <-
     aggregate(. ~ allMergedData$subject + allMergedData$activity,
-              allMergedData[, 3:563],
+              allMergedData[, 3:81],
               mean)
   colnames(tidyDfBoth)[1] <- c('Subject')
   colnames(tidyDfBoth)[2] <- c('Activity')
+  
+  print(tidyDfBoth)
+  write.table(tidyDfBoth, file = "C:/Users/Vaisag/Desktop/DataScience/Cleaning Data/Project/tidyDF2.txt", row.name =
+                FALSE)
   
 }
