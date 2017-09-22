@@ -78,6 +78,5 @@ run_analysis <- function()
               mean)
   colnames(tidyDfBoth)[1] <- c('Subject')
   colnames(tidyDfBoth)[2] <- c('Activity')
- 
   
 }
