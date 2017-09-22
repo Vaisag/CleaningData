@@ -78,9 +78,6 @@ run_analysis <- function()
               mean)
   colnames(tidyDfBoth)[1] <- c('Subject')
   colnames(tidyDfBoth)[2] <- c('Activity')
-  
-  print(tidyDfBoth)
-  write.table(tidyDfBoth, file = "C:/Users/Vaisag/Desktop/DataScience/Cleaning Data/Project/tidyDF.txt", row.name =
-                FALSE)
+ 
   
 }
